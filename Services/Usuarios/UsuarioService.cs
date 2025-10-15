@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,9 @@ namespace AppRpgEtec.Services.Usuarios
 { // define a classe UsuarioService que herda da classe Request
     public class UsuarioService : Request
     {
+
+
+
         // cria uma instância privada da classe Request para fazer chamadas HTTP
         private readonly Request _request;
 
@@ -19,6 +23,15 @@ namespace AppRpgEtec.Services.Usuarios
         public UsuarioService()
         {
             _request = new Request();
+        }
+
+        private string _token;
+        private string _apiUrlBase;
+
+        public UsuarioService(string token)
+        {
+            _request = new Request();
+            _token = token;
         }
 
         // método assíncrono para registrar um novo usuário
@@ -45,6 +58,22 @@ namespace AppRpgEtec.Services.Usuarios
 
             // retorna o objeto usuário atualizado com os dados recebidos da API
             return u;
+        }
+
+        public async Task<int> PutAtualizarLocalizacaoAsync(Usuario u)
+        {
+            string urlComplementar = "/AtualizarLocalizacao";
+            var result = await _request.PutAsync(_apiUrlBase + urlComplementar, u, _token);
+            return result;
+        }
+        //using System.Collections.ObjectModel
+        public async Task<ObservableCollection<Usuario>> GetUsuariosAsync()
+        {
+            string urlComplementar = string.Format("{0}", "/GetAll");
+            ObservableCollection<Models.Usuario> listaUsuarios = await
+            _request.GetAsync<ObservableCollection<Models.Usuario>>(_apiUrlBase + urlComplementar,
+            _token);
+            return listaUsuarios;
         }
     }
 }

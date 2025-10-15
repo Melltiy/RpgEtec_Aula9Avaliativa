@@ -24,6 +24,7 @@ namespace AppRpgEtec.ViewModels.Usuarios
         //quer dizer que eu to falando que um async ta chamando um await de AutenticarUsuario
         public void InicializarCommands()
         {
+
             AutenticarCommand = new Command(async () => await AutenticarUsuario()); // comando que executa a autenticação
             RegistrarCommand = new Command(async () => await RegistrarUsuario()); // comando que executa o registro
             DirecionarCadastroCommand = new Command(async () => await DirecionarParaCadastro()); // comando que executa o direcionamento
@@ -67,7 +68,8 @@ namespace AppRpgEtec.ViewModels.Usuarios
         // segunda region
 
         #region Metodos
-
+        private CancellationTokenSource cancelTokenSource;
+        private bool isCheckingLocation;
         public async Task AutenticarUsuario()
         {
             try
